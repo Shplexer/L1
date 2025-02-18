@@ -3,6 +3,8 @@ namespace L1 {
         private static float xStart = 0;
         private static float yStart = 0;
         private static int quarter = 0;
+        private static bool mirrorX = false; // Добавьте этот флаг
+        private static bool mirrorY = false; // Добавьте этот флаг
         public Form1() {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -43,9 +45,12 @@ namespace L1 {
             e.Graphics.DrawLine(blackPen, (this.ClientSize.Width / 2), 0, (this.ClientSize.Width / 2), this.ClientSize.Height);
             e.Graphics.DrawLine(blackPen, 0, (this.ClientSize.Height / 2), this.ClientSize.Width, (this.ClientSize.Height / 2));
 
-            float scaleX = (float)numericUpDown2.Value;
-            float scaleY = (float)numericUpDown2.Value;
-            
+            float scaleX = (float)numericUpDown2.Value * (mirrorX ? -1 : 1); // Изменено
+            float scaleY = (float)numericUpDown2.Value * (mirrorY ? -1 : 1); // Изменено
+
+            float offsetX = (float)XOffset.Value;
+            float offsetY = (float)YOffset.Value;
+
             int d1 = 100;
             int d2 = 150;
             float p1x = 0;
@@ -59,14 +64,14 @@ namespace L1 {
 
             double angle = (double)numericUpDown1.Value;
             double radianAngle = (angle * Math.PI) / 180;
-            
+
             CenterToQuarter();
-            
+
             PointF[] TransformedRhombus = [
-                new PointF(((float)(Math.Cos(radianAngle) * p1x - Math.Sin(radianAngle) * p1y) * scaleX) + xStart, ((float)(Math.Sin(radianAngle) * p1x + Math.Cos(radianAngle) * p1y) * scaleY) + yStart), //vert
-                new PointF(((float)(Math.Cos(radianAngle) * p2x - Math.Sin(radianAngle) * p2y) * scaleX) + xStart, ((float)(Math.Sin(radianAngle) * p2x + Math.Cos(radianAngle) * p2y) * scaleY) + yStart), //hor
-                new PointF(((float)(Math.Cos(radianAngle) * p3x - Math.Sin(radianAngle) * p3y) * scaleX) + xStart, ((float)(Math.Sin(radianAngle) * p3x + Math.Cos(radianAngle) * p3y) * scaleY) + yStart), //vert
-                new PointF(((float)(Math.Cos(radianAngle) * p4x - Math.Sin(radianAngle) * p4y) * scaleX) + xStart, ((float)(Math.Sin(radianAngle) * p4x + Math.Cos(radianAngle) * p4y) * scaleY) + yStart) //hor
+                new PointF(((float)(Math.Cos(radianAngle) * p1x - Math.Sin(radianAngle) * p1y) * scaleX) + xStart + offsetX, ((float)(Math.Sin(radianAngle) * p1x + Math.Cos(radianAngle) * p1y) * scaleY) + yStart + offsetY), //vert
+                new PointF(((float)(Math.Cos(radianAngle) * p2x - Math.Sin(radianAngle) * p2y) * scaleX) + xStart + offsetX, ((float)(Math.Sin(radianAngle) * p2x + Math.Cos(radianAngle) * p2y) * scaleY) + yStart + offsetY), //hor
+                new PointF(((float)(Math.Cos(radianAngle) * p3x - Math.Sin(radianAngle) * p3y) * scaleX) + xStart + offsetX, ((float)(Math.Sin(radianAngle) * p3x + Math.Cos(radianAngle) * p3y) * scaleY) + yStart + offsetY), //vert
+                new PointF(((float)(Math.Cos(radianAngle) * p4x - Math.Sin(radianAngle) * p4y) * scaleX) + xStart + offsetX, ((float)(Math.Sin(radianAngle) * p4x + Math.Cos(radianAngle) * p4y) * scaleY) + yStart + offsetY) //hor
             ];
             e.Graphics.DrawPolygon(bluePen, TransformedRhombus);
         }
@@ -103,6 +108,32 @@ namespace L1 {
 
         private void centerBtn_Click(object sender, EventArgs e) {
             quarter = 0;
+            this.Invalidate();
+        }
+
+        private void XOffset_ValueChanged(object sender, EventArgs e) {
+            this.Invalidate();
+        }
+
+        private void YOffset_ValueChanged(object sender, EventArgs e) {
+            this.Invalidate();
+        }
+        private void ToggleMirrorX() {
+            mirrorX = !mirrorX;
+            this.Invalidate();
+        }
+        private void ToggleMirrorY() {
+            mirrorY = !mirrorY;
+            this.Invalidate();
+        }
+
+        private void mirrorYBtn_Click(object sender, EventArgs e) {
+            ToggleMirrorY();
+            this.Invalidate();
+        }
+
+        private void mirrorXBtn_Click(object sender, EventArgs e) {
+            ToggleMirrorX();
             this.Invalidate();
         }
     }
