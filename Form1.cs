@@ -3,13 +3,15 @@ namespace L1 {
         private static float xStart = 0;
         private static float yStart = 0;
         private static int quarter = 0;
-        private static bool mirrorX = false; // Добавьте этот флаг
-        private static bool mirrorY = false; // Добавьте этот флаг
+        private static bool mirrorX = false; 
+        private static bool mirrorY = false; 
         public Form1() {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.WindowState = FormWindowState.Maximized;
+
         }
         private void CenterToQuarter() {
             switch (quarter) {
@@ -42,11 +44,23 @@ namespace L1 {
             Color black = Color.FromArgb(255, 0, 0, 0);
             Pen bluePen = new Pen(blue) { Width = 3 };
             Pen blackPen = new Pen(black) { Width = 1 };
-            e.Graphics.DrawLine(blackPen, (this.ClientSize.Width / 2), 0, (this.ClientSize.Width / 2), this.ClientSize.Height);
-            e.Graphics.DrawLine(blackPen, 0, (this.ClientSize.Height / 2), this.ClientSize.Width, (this.ClientSize.Height / 2));
 
-            float scaleX = (float)numericUpDown2.Value * (mirrorX ? -1 : 1); // Изменено
-            float scaleY = (float)numericUpDown2.Value * (mirrorY ? -1 : 1); // Изменено
+            int centerX = this.ClientSize.Width / 2;
+            int centerY = this.ClientSize.Height / 2;
+
+            e.Graphics.DrawLine(blackPen, centerX, 0, centerX, this.ClientSize.Height);
+            e.Graphics.DrawLine(blackPen, 0, centerY, this.ClientSize.Width, centerY);
+
+            for (int x = centerX % 100; x < this.ClientSize.Width; x += 100) {
+                e.Graphics.DrawLine(blackPen, x, centerY - 5, x, centerY + 5);
+            }
+
+            for (int y = centerY % 100; y < this.ClientSize.Height; y += 100) {
+                e.Graphics.DrawLine(blackPen, centerX - 5, y, centerX + 5, y);
+            }
+
+            float scaleX = (float)numericUpDown2.Value * (mirrorX ? -1 : 1);
+            float scaleY = (float)numericUpDown2.Value * (mirrorY ? -1 : 1);
 
             float offsetX = (float)XOffset.Value;
             float offsetY = (float)YOffset.Value;

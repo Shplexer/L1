@@ -62,7 +62,7 @@
             numericUpDown2.DecimalPlaces = 2;
             numericUpDown2.Font = new Font("Segoe UI", 15F);
             numericUpDown2.Location = new Point(171, 48);
-            numericUpDown2.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numericUpDown2.Minimum = new decimal(new int[] { 1, 0, 0, 65536 });
             numericUpDown2.Name = "numericUpDown2";
             numericUpDown2.Size = new Size(120, 34);
             numericUpDown2.TabIndex = 3;
